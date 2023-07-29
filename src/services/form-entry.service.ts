@@ -1,16 +1,17 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 import {Model, Types} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
-import {FieldService} from './field.service';
 import {FormEntry} from "../schemas/form/form-entry.schema";
 import {CreateFieldEntryDto} from "../dto/create-field-entry.dto";
 import {FileValue} from "../schemas/fields/file-entry.schema";
+import {FormService} from "./form.service";
+import {Form} from "../schemas/form/form.schema";
 
 @Injectable()
 export class FormEntryService {
 
     constructor(@InjectModel(FormEntry.name) private formModel: Model<FormEntry>,
-                private fieldService: FieldService) {
+                private formService: FormService) {
     }
 
     async findAllByFormId(formId: string): Promise<FormEntry[]> {
@@ -23,7 +24,6 @@ export class FormEntryService {
         const document = await this.formModel
             .find({_id: entryId, formId: id})
             .populate('fields')
-            .populate('formId','name active description')
             .lean();
         if (document.length == 0)
             throw new NotFoundException('entry not found !');
@@ -40,8 +40,11 @@ export class FormEntryService {
     }
 
     async create(fields: CreateFieldEntryDto[], formId: string): Promise<FormEntry> {
+        const form: Form = await this.formService.findById(formId);
         const formEntry = new this.formModel({
             formId,
+            name: form.name,
+            description: form.description,
             fields
         });
         return await formEntry.save();

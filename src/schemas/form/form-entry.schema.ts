@@ -11,8 +11,12 @@ export type FormDocument = HydratedDocument<FormEntry>;
 
 @Schema({timestamps: true})
 export class FormEntry {
-    @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Form'})
+    @Prop({type: MongooseSchema.Types.ObjectId})
     formId: Form;
+    @Prop({required: true})
+    name: string;
+    @Prop({required: true})
+    description: string;
 
     @Prop([{type: FieldEntry}])
     fields: [FieldEntry];

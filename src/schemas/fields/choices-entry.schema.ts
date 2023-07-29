@@ -1,6 +1,7 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {ArrayMinSize, IsArray} from "class-validator";
 import {Type} from "class-transformer";
+import * as stream from "stream";
 
 @Schema({_id: false})
 export class ChoicesValue {
@@ -13,6 +14,8 @@ export class ChoicesValue {
 
 @Schema({_id: false})
 export class ChoicesEntry {
+    @Prop({required: true})
+    choices: string[];
     @Prop({required: true, type: ChoicesValue})
     value: ChoicesValue;
 }

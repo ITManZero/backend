@@ -1,4 +1,14 @@
-import {IsEnum, IsInt, IsNotEmpty, IsString, Min, ValidateNested} from 'class-validator';
+import {
+    ArrayMinSize,
+    IsArray,
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    Min,
+    ValidateNested
+} from 'class-validator';
 import {FieldTypes} from '../constants/field.constants';
 import {FieldGroupTypes} from '../constants/field-groups.constants';
 import {Type} from "class-transformer";
@@ -15,6 +25,12 @@ export class CreateFieldEntryDto {
     @Min(1)
     order: number;
 
+    @IsArray()
+    @ArrayMinSize(1)
+    @Type(() => String)
+    @IsOptional()
+    choices: string[];
+
     @IsEnum(FieldTypes)
     type: FieldTypes;
 
@@ -27,7 +43,7 @@ export class CreateFieldEntryDto {
         if (opts.object.group === FieldGroupTypes.DATE
             || opts.object.group === FieldGroupTypes.NUMBER
             || opts.object.group === FieldGroupTypes.TEXT) return StringValue;
-        if (opts.object.group === FieldGroupTypes.DATE) return FileValue;
+        if (opts.object.group === FieldGroupTypes.FILE) return FileValue;
         if (opts.object.group === FieldGroupTypes.CHOICES) return ChoicesValue;
     })
     value: StringValue | ChoicesValue | FileValue;
