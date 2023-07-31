@@ -30,6 +30,7 @@ export class CreateFieldEntryDto {
     @Type(() => String)
     @IsOptional()
     choices: string[];
+    
 
     @IsEnum(FieldTypes)
     type: FieldTypes;
