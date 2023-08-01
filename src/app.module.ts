@@ -1,7 +1,7 @@
 import {Module} from '@nestjs/common';
 import {MongooseModule} from '@nestjs/mongoose';
 import {ConfigModule} from '@nestjs/config';
-import {FromModule} from './modules/from.module';
+import {FormModule} from './modules/form.module';
 
 @Module({
     imports: [MongooseModule.forRoot('mongodb+srv://cluster0.likj3kp.mongodb.net', {
@@ -14,7 +14,7 @@ import {FromModule} from './modules/from.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        FromModule],
+        FormModule],
     controllers: [],
     providers: [],
 })

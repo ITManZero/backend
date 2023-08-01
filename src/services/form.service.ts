@@ -36,6 +36,16 @@ export class FormService {
         return document;
     }
 
+    public async findActiveById(id: string): Promise<Form> {
+        const document = await this.formModel
+            .find({_id: id, active: 'active'})
+            .populate('fields')
+            .lean();
+        if (document.length == 0)
+            throw new NotFoundException('form not found !');
+        return document[0];
+    }
+
     private async findDocById(id: string): Promise<FormDocument> {
         const document = await this.formModel
             .findById(id)
